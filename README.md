@@ -1,2 +1,2 @@
 # cellscape
-Imaging viewer for cells with natural language interrogation from Claude
+Cell imaging pipeline using natural language interrogation reasoning from Claude
