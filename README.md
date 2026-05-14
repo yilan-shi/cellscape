@@ -1,12 +1,12 @@
 # cellscape
-Anthropic STEM fellowship proposal
-Creating a thinking microscope for cell biolgists 
+Anthropic STEM fellowship proposal:
+Create a thinking microscope for cell biologists 
 
 ## Table of Contents
 
-1. [Bottlenecks in Imaging]
-2. [I built a prototype called Cellscape (short for cellular landscape)
-3. [Proposal: A Thinking Microscope Driven by Claude Reasoning in Real Time]
+1. Bottlenecks in Imaging
+2. I built a prototype called Cellscape (short for cellular landscape)
+3. Proposal: A Thinking Microscope Driven by Claude Reasoning in Real Time
 
 ---
 
@@ -14,7 +14,7 @@ Creating a thinking microscope for cell biolgists
 
 During my PhD work in the Yeo Lab at UCSD, I developed live cell RNA imaging systems using dCas9, SunTag, and RCas9 to track endogenous MALAT1 and mRNA dynamics in live HeLa cells. A large part of that work was spent at the confocal microscope trying to get consistent data out of images. The physical work of imaging itself was cumbersome and varied drastically across different experimenter's techniques; the analysis part had no real standardization pipeline, and existing software wasn't very smart nor adaptable.  
 
-Furthermore, I encountered these problems that bottlenecked my project: cells moved between frames, making single molecule tracking across z planes unreliable. Signals were too dim to track without laser power that caused phototoxicity. Subcellular localization calls (nuclear vs cytoplasmic, perinuclear vs intranuclear) depended on manual judgment rather than objective segmentation. And even when imaging worked, the data said nothing about the molecular state of the RNA: which isoform, whether it was modified, what its processing state was. You could see it, but you could not identify it.
+These are examples of some problems I encountered daily: cells moved between frames, making single molecule tracking across z planes unreliable. Signals were too dim to track without laser power that caused phototoxicity. Subcellular localization calls (nuclear vs cytoplasmic, perinuclear vs intranuclear) depended on manual judgment rather than objective segmentation. And even when imaging worked, the data said nothing about the molecular state of the RNA: which isoform, whether it was modified, what its processing state was. You could see it, but you could not identify it.
 
 My confocal woes clustered into 4 main problem areas:
 
@@ -98,15 +98,17 @@ Responses containing these patterns are logged automatically to the Failures tab
 
 ---
 
-## 3. STEM Fellowship Proposal for this summer: A Thinking Microscope Driven by Claude Reasoning in Real Time
+## 3. Fellowship Proposal (open to other ideas too!): A Thinking Microscope Driven by Claude Reasoning in Real Time
 
 ### The problem with how microscopes currently operate
 
-A confocal experiment today works like this: a scientist sets acquisition parameters (laser power, z step size, frame interval, number of channels), presses start, and the microscope acquires exactly what it was told to. If something unexpected happens in the sample during acquisition (a cell entering mitosis, a stress response in a subpopulation, a fluorescent signal appearing somewhere unusual), the microscope continues executing its original instructions. It has no mechanism to notice, adapt, or redirect.
+A confocal experiment today works like this: a grad student/post-doc sets acquisition parameters (laser power, z step size, frame interval, number of channels), tinkers with the sample, presses start, and the microscope acquires exactly what it was told to. If unforseen events happen during the capture process, the microscope continues executing its original instructions, and often the user/biologist does not know if something is wrong until he/she/they go back to the computer and analyze it. This "lag time" between capture and analysis and iteration can be days to even a week between imaging the sample and figuring out what to do next experimentally. 
 
-### Claude as the real-time decision layer to assist scientists in capturing rare cellular events
+It's similar the scenario where a Founder talks to a user, then builds the product/solution/app by outsourcing it to a remote team that is disjointed from the original conversation. The original problem gets diluted and passed down through multiple inefficient workflow streams until it reaches the team building it.
 
-The proposal is to close this gap by inserting Claude as a reasoning layer between the microscope's acquisition output and its next acquisition command. Every time the microscope completes a z stack, an imaging pipeline processes that z stack into structured data (segmentation metrics, colocalization values, morphology deltas, per cell feature vectors) and passes it to Claude. Claude evaluates the data against the experimental context and generates a hardware command specifying what should change for the next acquisition cycle.
+### Claude as the real-time decision layer to assist microscopy work: 
+
+The proposal is to close this gap by inserting Claude as a reasoning layer between the microscope's acquisition and next command. Every time the microscope completes a z stack, an imaging pipeline processes that z stack into structured data (segmentation metrics, colocalization values, morphology deltas, per cell feature vectors) and passes it to Claude. Claude evaluates the data against the experimental context and generates a hardware command specifying what should change for the next acquisition cycle.
 
 This runs as a continuous five stage loop:
 
@@ -146,10 +148,12 @@ Full loop latency is approximately 1.5 seconds. This fits within standard live c
 
 ### Hardware integration pathway
 
-All major confocal manufacturers expose programmatic control interfaces for external software to adjust acquisition parameters at runtime. Zeiss LSM systems use the ZEN Connect Python API, which provides access to stage position, laser power, detector gain, z drive, and scan parameter control. Leica SP8 and STELLARIS systems expose the LAS X automation framework, including the MatrixScreener interface for multi position and multi parameter acquisition sequences. Nikon A1 and AXR systems provide the NIS Elements software development kit and a General Analysis macro environment with Python bindings. Olympus FV series systems use the FluoView SDK. Micro Manager, an open source microscope control platform, provides a unified hardware abstraction layer that works across all major brands and is already in use in many academic imaging cores. It exposes a Java and Python API and supports stage, z drive, laser, camera, and filter wheel control through a standardized interface regardless of the underlying hardware.
+I discovered that most confocal manufacturers (Zeiss, Leica) bridge programmable interfaces for external software to adjust run time parameters. For example, Zeiss LSM systems use the ZEN Connect Python API, which provides access to stage position, laser power, detector gain, z drive, and scan parameter control. Leica SP8 and STELLARIS systems expose LAS X automation framework that helps with stage positioning and multi-parameter acquisition sequences. 
 
-The integration architecture would use a thin adapter layer that translates abstract JSON commands from Claude (for example, `{"action": "adjust_laser", "line": 488, "power_percent": 7}`) into the specific API calls for whichever control platform is connected. This keeps the Claude reasoning loop hardware agnostic: the same loop runs on any system that exposes a software control interface, and adding support for a new microscope requires only writing a new adapter.
-## Real Data Interrogation
+This is a part that I would need mentorship and the resources at Anthropic to build out and test. I am not versed in hardware (nor hardware/software integration), but it would be exciting to bring this project to scientists and biology researchers. 
+
+
+## Interrogation pipeline (work in progress)
 
 CellScope includes a **Real Data Interrogation** feature that lets you:
 - Upload your own microscopy images (PNG/JPEG)
