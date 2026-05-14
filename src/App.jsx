@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import * as THREE from "three";
+import RealDataInterrogation from './RealDataInterrogation';
 
 // ─── synthetic cell data generator ──────────────────────────────────────────
 function generateCellPoints(condition = "control", seed = 1) {
@@ -161,18 +162,6 @@ function useThreeScene(canvasRef, condition) {
 // ─── Z-slice canvas ──────────────────────────────────────────────────────────
 function ZSliceView({ condition, slice, total }) {
   const canvasRef = useRef(null);
-
-  // Add this NEW function inside ZSliceView
-  const exportThisSlice = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = `slice_${condition}_z${String(slice + 1).padStart(2, '0')}.png`;
-    link.click();
-  };
-
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -405,14 +394,15 @@ Be specific and scientific in your analysis. When you are uncertain about spatia
 
       {/* tab bar */}
       <div style={{ display: "flex", borderBottom: "1px solid rgba(0,212,255,0.1)", background: "rgba(0,5,12,0.6)" }}>
-        {["viewer", "interrogate", "failures"].map(tab => (
+        {["viewer", "interrogate", "failures", "realdata"].map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             padding: "10px 22px", background: "transparent", border: "none", cursor: "pointer",
             borderBottom: activeTab === tab ? "2px solid #00d4ff" : "2px solid transparent",
             color: activeTab === tab ? "#00d4ff" : "rgba(180,200,210,0.5)",
             fontSize: 10, letterSpacing: 2, textTransform: "uppercase", transition: "color 0.2s"
           }}>
-            {tab}{tab === "failures" && failureLog.length > 0 && <span style={{ marginLeft: 6, background: "#ff5a1a", borderRadius: "50%", padding: "1px 5px", fontSize: 9, color: "#fff" }}>{failureLog.length}</span>}
+            {tab === "realdata" ? "REAL DATA" : tab}
+            {tab === "failures" && failureLog.length > 0 && <span style={{ marginLeft: 6, background: "#ff5a1a", borderRadius: "50%", padding: "1px 5px", fontSize: 9, color: "#fff" }}>{failureLog.length}</span>}
           </button>
         ))}
         <div style={{ flex: 1 }} />
@@ -610,6 +600,9 @@ Be specific and scientific in your analysis. When you are uncertain about spatia
           )}
         </div>
       )}
+
+      {/* real data tab */}
+      {activeTab === "realdata" && <RealDataInterrogation />}
 
       {/* footer */}
       <div style={{ borderTop: "1px solid rgba(0,212,255,0.08)", padding: "10px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
