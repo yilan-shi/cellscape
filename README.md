@@ -61,6 +61,15 @@ To test whether Claude could help address these axes, I built a protocype called
 
 **Q9.** Can you identify where the nucleus ends and the cytoplasm begins based on fluorescence intensity patterns alone? Is the boundary sharp or gradual? How confident are you in your assignment (0 to 100%)?
 
+** Some samples of wrong answers: 
+<img width="1223" height="189" alt="Screenshot 2026-05-13 at 10 19 02 PM" src="https://github.com/user-attachments/assets/53c13bfe-d1f4-447a-be20-9755155ab888" />
+
+<img width="1216" height="218" alt="Screenshot 2026-05-13 at 10 19 15 PM" src="https://github.com/user-attachments/assets/75cf587f-38e5-4701-bc86-ab3a9298a1c2" />
+
+
+
+
+
 ---
 
 ## 2. Cellscape Prototype Build
